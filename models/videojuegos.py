@@ -12,3 +12,7 @@ class Videojuego(BaseModel):
 
 class GetVideojuegosResponse(BaseModel):
     videojuegos: List[Videojuego]
+
+
+class CreateVideojuegoResponse(BaseModel):
+    message: str
