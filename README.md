@@ -1,57 +1,53 @@
-# Clase FastAPI
+# TP1 — ABM de Usuarios + ABM de Videojuegos (FastAPI)
 
-Clase para aprender **FastAPI** y **Pydantic**.
+API con **FastAPI** + **Pydantic** que implementa el ABM (Alta, Baja,
+Modificación) completo de la entidad `Usuario` y de la entidad `Videojuego`,
+con almacenamiento en memoria.
 
-## Crear el entorno virtual (venv)
+- Documentación interactiva (Swagger): **`http://127.0.0.1:8000/docs`**
 
-Desde esta carpeta (`clase-fastapi`):
+## Endpoints usuarios
+
+| Método | Ruta                | Descripción                                                        |
+| ------ | ------------------- | ------------------------------------------------------------------ |
+| GET    | `/user`             | Lista todos los usuarios                                           |
+| GET    | `/user?is_active=`  | Filtra por estado: `true` activos, `false` inactivos (sin param: todos) |
+| POST   | `/user`             | Alta de usuario                                                    |
+| PUT    | `/user/{id}`        | Modifica nombre y/o estado; devuelve el usuario actualizado        |
+| DELETE | `/user/{id}`        | Baja de usuario                                                    |
+
+Todos los casos de usuario inexistente responden `404`.
+
+## Endpoints videojuegos
+
+Entidad con 5 campos: `id`, `titulo`, `desarrollador`, `anio` y
+`esta_disponible`.
+
+| Método | Ruta                        | Descripción                                                        |
+| ------ | --------------------------- | ------------------------------------------------------------------ |
+| GET    | `/videojuego`               | Lista todos los videojuegos                                        |
+| GET    | `/videojuego?esta_disponible=` | Filtra por disponibilidad (sin param: todos)                     |
+| GET    | `/videojuego/{id}`          | Consulta por id                                                    |
+| POST   | `/videojuego`               | Alta de videojuego                                                 |
+| PUT    | `/videojuego/{id}`          | Modifica campos (los que se envíen); devuelve el videojuego actualizado |
+| DELETE | `/videojuego/{id}`          | Baja de videojuego                                                 |
+
+Videojuego inexistente responde `404`.
+
+## Cómo levantar la aplicación
 
 ```bash
-python3 -m venv .venv
-```
-
-Activar el entorno virtual:
-
-```bash
-# macOS / Linux
-source .venv/bin/activate
+python -m venv .venv
 
 # Windows (PowerShell)
 .venv\Scripts\Activate.ps1
-```
 
-## Instalar los requerimientos
+# macOS / Linux
+source .venv/bin/activate
 
-Con el entorno virtual activado:
-
-```bash
 pip install -r requirements.txt
+uvicorn main:app --reload
 ```
 
-## Ejecutar la aplicación
-
-```bash
-fastapi dev main.py
-```
-
-La API quedará disponible en `http://127.0.0.1:8000` y la documentación interactiva en `http://127.0.0.1:8000/docs`.
-
-## Lint y chequeo de tipos
-
-El proyecto incluye configuración local para dos herramientas:
-
-- **[`setup.cfg`](./setup.cfg)**: configuración de [`pycodestyle`](https://pycodestyle.pycqa.org/) (chequeo de estilo PEP 8). Define `max-line-length = 79` y excluye `.venv` y `__pycache__` del análisis.
-- **[`pyrightconfig.json`](./pyrightconfig.json)**: configuración de [`pyright`](https://microsoft.github.io/pyright/) (chequeo de tipos). Apunta al entorno virtual local (`.venv`) para resolver las dependencias instaladas y excluye `.venv` y `__pycache__`.
-
-`pyright` ya está incluido en `requirements.txt`. `pycodestyle` no, así que hay que instalarlo aparte.
-
-Con el entorno virtual activado, correr:
-
-```bash
-pip install pycodestyle
-python -m pycodestyle .
-```
-
-```bash
-pyright
-```
+Abrí `http://127.0.0.1:8000/docs` para probar todos los endpoints desde
+Swagger UI.
