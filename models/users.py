@@ -8,6 +8,12 @@ class User(BaseModel):
     is_active: bool = True  # default value, field becomes optional
 
 
+class UpdateUser(BaseModel):
+    # all fields optional: only the ones sent by the client are updated
+    name: str | None = None
+    is_active: bool | None = None
+
+
 class GetUsersResponse(BaseModel):
     users: List[User]
 
