@@ -16,3 +16,15 @@ class GetVideojuegosResponse(BaseModel):
 
 class CreateVideojuegoResponse(BaseModel):
     message: str
+
+
+class UpdateVideojuego(BaseModel):
+    # all fields optional: only the ones sent by the client are updated
+    titulo: str | None = None
+    desarrollador: str | None = None
+    anio: int | None = None
+    esta_disponible: bool | None = None
+
+
+class DeleteVideojuegoResponse(BaseModel):
+    message: str
