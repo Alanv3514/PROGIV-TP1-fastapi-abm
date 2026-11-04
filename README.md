@@ -42,8 +42,11 @@ python -m venv .venv
 # Windows (PowerShell)
 .venv\Scripts\Activate.ps1
 
-# macOS / Linux
+# macOS / Linux (bash, zsh)
 source .venv/bin/activate
+
+# macOS / Linux (fish)
+source .venv/bin/activate.fish
 
 pip install -r requirements.txt
 uvicorn main:app --reload
@@ -51,3 +54,42 @@ uvicorn main:app --reload
 
 Abrí `http://127.0.0.1:8000/docs` para probar todos los endpoints desde
 Swagger UI.
+
+### Alternativa sin activar el entorno
+
+Sirve en cualquier shell y evita problemas de activación:
+
+```bash
+.venv/bin/python -m pip install -r requirements.txt
+.venv/bin/python -m uvicorn main:app --reload
+```
+
+En Windows sería `.venv\Scripts\python -m ...`.
+
+## Solución de problemas
+
+### `source .venv/bin/activate` falla y `uvicorn` no se encuentra
+
+Síntoma típico en **Arch / CachyOS** (o cualquier distro con PEP 668) y/o
+al usar **fish**:
+
+```text
+.venv/bin/activate (línea 40): 'case' builtin usado fuera de un bloque 'switch'
+source: Error al leer el archivo '.venv/bin/activate'
+```
+
+Causa: el archivo `.venv/bin/activate` es para **bash/zsh**, no para fish.
+Al no activarse el venv, `pip install` usa el Python del sistema (bloqueado
+por `externally-managed-environment`) y `uvicorn` nunca queda en el `PATH`.
+
+Solución: usar el script de activación que corresponde a tu shell.
+
+| Shell        | Comando de activación              |
+| ------------ | ---------------------------------- |
+| bash / zsh   | `source .venv/bin/activate`        |
+| fish         | `source .venv/bin/activate.fish`   |
+| PowerShell   | `.venv\Scripts\Activate.ps1`       |
+
+Para comprobar que quedó activado, `which python` debe apuntar a
+`.../.venv/bin/python` y `which uvicorn` debe existir. Si preferís no
+activar nada, usá la [alternativa sin activar el entorno](#alternativa-sin-activar-el-entorno).
